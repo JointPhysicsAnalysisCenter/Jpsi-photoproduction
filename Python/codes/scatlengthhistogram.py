@@ -501,39 +501,3 @@ plt.tick_params(direction='in',labelsize=12)
 plt.legend(loc='upper right',ncol=1,frameon=False,fontsize=12)
 fig.savefig('rvmd0_histogram.pdf', bbox_inches='tight')
 fig.savefig('rvmd0_histogram.png', bbox_inches='tight')
-
-
-'''
-fig, subfig = plt.subplots(2,figsize=(3,3))
-
-for i in np.arange(2):
-    subfig[i].axis('off')
-
-left, width = 0.1, 0.9; bottom, height = 0.1, 0.8 ;
-rect_histy = [left, bottom, width, height]
-subfig[0] = plt.axes(rect_histy)
-
-subfig[0].set_xlim(-2.999, 0.5)
-subfig[0].set_ylabel(r'$N$',fontsize=14)
-subfig[0].set_xlabel(r'$a_{\psi p}$ (fm)',fontsize=14)
-subfig[0].hist(a_r_forhist, bins=bins,color=jpac_blue,alpha=0.3,label='3C-R')
-subfig[0].hist(a_nr_forhist, bins=bins,color=jpac_red ,alpha=0.3,label='3C-NR')
-subfig[0].tick_params(direction='in',labelsize=12)
-subfig[0].legend(loc='center left',ncol=1,frameon=False,fontsize=12)
-
-
-left, width = 0.15, 0.2; bottom, height = 0.7, 0.2;
-rect_histy = [left, bottom, width, height]
-subfig[1] = plt.axes(rect_histy)
-subfig[1].axis('off')
-file_jpac_logo = "JPAC_logo_color-1.png"
-jpac_logo = plt.imread(file_jpac_logo)
-subfig[1].imshow(jpac_logo)
-
-fig.savefig('scatlength_histogram.pdf', bbox_inches='tight')
-'''
-
-
-
-
-

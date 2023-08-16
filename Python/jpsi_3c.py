@@ -3,6 +3,8 @@
 """
 Created on Feb 2023
 
+Three channels scattering length
+
 @author: cesar
 """
 
@@ -477,8 +479,6 @@ def bs_total(xbs,sarray,m00,m01,m1,m2,m3,m4,m5,m6):
     ns, nbs  = len(sarray), len(xbs[:,0])
     idown68, iup68 = int(np.trunc(0.16*nbs)),  int(np.trunc(0.84*nbs))
     idown95, iup95 = int(np.trunc(0.025*nbs)), int(np.trunc(0.975*nbs))        
-#    idown95, iup95 = int(np.trunc(0.05*nbs)), int(np.trunc(0.95*nbs))    
-
     dw68, up68, dw95, up95 = np.zeros(ns), np.zeros(ns), np.zeros(ns), np.zeros(ns);
     for j in range(ns):
         s = sarray[j]
@@ -518,7 +518,6 @@ def pull_cc(par):
     s, t = sfromEbeam(Data.ebeam,m01), Data.t
     clase = Data.clase
     func = [ observable_cc(s[i],t[i],m00,m01,m1,m2,m3,m4,m5,m6,N,n0l,n1l,n2l,a00l,a11l,a22l,a01l,a02l,a12l,lmax,clase[i]) for i in range(len(Data.ebeam))]
-    print(Data.error)
     return (Data.obs-func)/Data.error
 
 ###############################################################################
@@ -956,7 +955,6 @@ elif option=='fit':
     #   Fitting using MINUIT
     storage = []
     for i in range(nmc):
-#        if i%10==0: print(i/nmc*100,'%')
         Nmc    = np.array(Ninput[i])
         n0lmc  = np.array(n0linput[i])
         n1lmc  = np.array(n1linput[i])
@@ -973,27 +971,15 @@ elif option=='fit':
         m_pc.errordef = Minuit.LEAST_SQUARES
         for kfix in range(len(fixated)): 
             if fixated[kfix]==1: m_pc.fixed[kfix] = True
-        
-        #   Hand-tunning
-        #m_pc.limits['b010']=(4.1,4.4)
-        #   End of hand-tunning
-        
-        m_pc.migrad(); #m_pc.hesse();
+                
+        m_pc.migrad();
         chi2 = m_pc.fval
         chi2dof = chi2/(len(Datainput.obs)-npar)
         print(i+1,'chi2=',chi2,'chi2/dof=',chi2dof)
-#        print(dashes); print(dashes);
         print(m_pc.params); 
-#        print(m_pc.covariance); print(m_pc.covariance.correlation())
         N, parreduced = m_pc.values[0], np.delete(m_pc.values,0)
         n0l, n1l, n2l, a00l, a11l, a22l, a01l, a02l, a12l = np.array_split(parreduced,9)
         storage.append( (chi2,chi2dof,N,n0l,n1l,n2l,a00l,a11l,a22l,a01l,a02l,a12l) )
-        #   Structure boostrap fit = i
-        #       chi2 = storage[i][0]
-        #       chi2dof = storage[i][1]
-        #       N = storage[i][2]
-        #       al_0 = storagel[i][3][0], al_1 = storagel[i][3][1], ...
-        #       bl_0 = storagel[i][4][0], al_1 = storagel[i][4][1], ...
     
     #   Sorting
     sorted_storage = sorted(storage, key=lambda chi2: chi2[0])
@@ -1089,8 +1075,6 @@ elif option=='bs':
     #print('Lmax:',lmax)
     #   Number of free parameters
     npar = len(fixated)-np.sum(np.array(fixated))
-    #print('Number of parameters:',npar)
-
     nbs = nmc
         
     #   Initial values for the parameters
@@ -1129,7 +1113,6 @@ elif option=='bs':
     #   BS fits
     storage_bs = []
     for i in range(nbs):
-        #print(i+1,'out of',nbs)
         Data.obs = np.array(ypseudodata[i])
         m_bs = Minuit(LSQ_cc,parameters_input,name=nombre)
         m_bs.errordef = Minuit.LEAST_SQUARES
@@ -1137,8 +1120,6 @@ elif option=='bs':
             if fixated[kfix]==1: m_bs.fixed[kfix] = True
         m_bs.migrad();
         chi2, chi2dof = m_bs.fval, m_bs.fval/(len(Datainput.obs)-npar);
-        #print('BS Fit ',i+1,' out of ',nbs, chi2, chi2dof)
-        #print(m_bs.params); 
         N, parreduced = m_bs.values[0], np.delete(m_bs.values,0)
         n0l, n1l, n2l, a00l, a11l, a22l, a01l, a02l, a12l = np.array_split(parreduced,9)
         storage_bs.append( (chi2,chi2dof,N,n0l,n1l,n2l,a00l,a11l,a22l,a01l,a02l,a12l) )
@@ -1160,75 +1141,6 @@ elif option=='bs':
         x_storage.append(x)
 
     np.savetxt('pcbs.txt', x_storage)  
-
-    """
-    #   Mean and errors
-    na00l,  nn0l = len(a00l), len(n0l)
-    down68, up68 = int(np.trunc(0.16*nbs)),  int(np.trunc(0.84*nbs))
-    down95, up95 = int(np.trunc(0.025*nbs)), int(np.trunc(0.975*nbs))    
-    al_storage = []
-
-    j = 0
-    Nl = np.array([ sorted_storage_bs[k][2] for k in range(nbs) ] )
-    Nlsorted = np.sort(Nl)
-    Nl_array = [ j, np.mean(Nlsorted), Nlsorted[down68], Nlsorted[up68], Nlsorted[down95], Nlsorted[up95] ]
-    al_storage.append(Nl_array); j = j+1
-    for i in range(nn0l):
-        n0l = np.array([ sorted_storage_bs[k][3][i] for k in range(nbs) ] )
-        n0lsorted = np.sort(n0l)
-        n0l_array = [ j, np.mean(n0lsorted), n0lsorted[down68], n0lsorted[up68], n0lsorted[down95], n0lsorted[up95] ]
-        al_storage.append(n0l_array)   
-        j=j+1
-
-        n1l = np.array([ sorted_storage_bs[k][4][i] for k in range(nbs) ] )
-        n1lsorted = np.sort(n1l)
-        n1l_array = [ j, np.mean(n1lsorted), n1lsorted[down68], n1lsorted[up68], n1lsorted[down95], n1lsorted[up95] ]
-        al_storage.append(n1l_array); j=j+1
-
-    for i in range(na00l):
-        a00l = np.array([ sorted_storage_bs[k][5][i] for k in range(nbs) ] )
-        a00lsorted = np.sort(a00l)
-        a00l_array = [ j, np.mean(a00lsorted), a00lsorted[down68], a00lsorted[up68], a00lsorted[down95], a00lsorted[up95] ]
-        al_storage.append(a00l_array); j=j+1
-        
-        a01l = np.array([ sorted_storage_bs[k][6][i] for k in range(nbs) ] )
-        a01lsorted = np.sort(a01l)
-        a01l_array = [ j, np.mean(a01lsorted), a01lsorted[down68], a01lsorted[up68], a01lsorted[down95], a01lsorted[up95] ]
-        al_storage.append(a01l_array); j=j+1
-
-        a11l = np.array([ sorted_storage_bs[k][7][i] for k in range(nbs) ] )
-        a11lsorted = np.sort(a11l)
-        a11l_array = [ j, np.mean(a11lsorted), a11lsorted[down68], a11lsorted[up68], a11lsorted[down95], a11lsorted[up95] ]
-        al_storage.append(a11l_array); j=j+1
-
-        b00l = np.array([ sorted_storage_bs[k][8][i] for k in range(nbs) ] )
-        b00lsorted = np.sort(b00l)
-        b00l_array = [ j, np.mean(b00lsorted), b00lsorted[down68], b00lsorted[up68], b00lsorted[down95], b00lsorted[up95] ]
-        al_storage.append(b00l_array); j=j+1
-        
-        b01l = np.array([ sorted_storage_bs[k][9][i] for k in range(nbs) ] )
-        b01lsorted = np.sort(b01l)
-        b01l_array = [ j, np.mean(b01lsorted), b01lsorted[down68], b01lsorted[up68], b01lsorted[down95], b01lsorted[up95] ]
-        al_storage.append(b01l_array); j=j+1
-
-        b11l = np.array([ sorted_storage_bs[k][10][i] for k in range(nbs) ] )
-        b11lsorted = np.sort(b11l)
-        b11l_array = [ j, np.mean(b11lsorted), b11lsorted[down68], b11lsorted[up68], b11lsorted[down95], b11lsorted[up95] ]
-        al_storage.append(b11l_array); j=j+1
-
-        b11l = np.array([ sorted_storage_bs[k][11][i] for k in range(nbs) ] )
-        b11lsorted = np.sort(b11l)
-        b11l_array = [ j, np.mean(b11lsorted), b11lsorted[down68], b11lsorted[up68], b11lsorted[down95], b11lsorted[up95] ]
-        al_storage.append(b11l_array); j=j+1
-        
-    np.savetxt('pcmean_n_errors.txt', al_storage,fmt='%i %e %e %e %e %e')
-    """
-    #   Covariance and correlation matrices
-    #xarray = np.transpose(np.array(x_storage))    
-    #xcovdiag = np.var(xarray, axis=1, ddof=1)
-    #xcov, xcorr = np.cov(xarray), np.corrcoef(xarray);
-    #np.savetxt('pccov.txt', xcov)  
-    #np.savetxt('pccorr.txt', xcorr)
     
 ###############################################################################
 #   Plot
@@ -1287,7 +1199,6 @@ elif option=='plot' or option=='plotlog':
             subfig[1,1].legend(loc='lower right',ncol=1,frameon=True,fontsize=11)
 
             fig.savefig('amplitude.pdf', bbox_inches='tight')
-            
             
             xplots, yplots = 2, 2; 
             fig, subfig = plt.subplots(xplots,yplots,figsize=(15,15))
@@ -1442,7 +1353,6 @@ elif option=='plot' or option=='plotlog':
             subfig[1,0].legend(loc='upper right',ncol=1,frameon=True,fontsize=11)
             subfig[1,1].legend(loc='upper right',ncol=1,frameon=True,fontsize=11)
 
-        #plt.show()
         fig.savefig('plotgluex.pdf', bbox_inches='tight')
 
     if dataset=='007' or dataset=='combined':
@@ -1457,10 +1367,8 @@ elif option=='plot' or option=='plotlog':
                 idxarray = np.where(E_idx007==idx[k])
                 for ide in idxarray[0]:
                     x, y = -Datainput_007.t[ide], Datainput_007.obs[ide]
-#                    xerror = np.absolute(Datainput_007.tmin[ide]-Datainput_007.tmax[ide])/2.
                     yerror = Datainput_007.error[ide]
                     ebeam_text = str(Datainput_007.ebeam[ide])
-#                    subfig[i,j].text(x,y,ebeam_text,fontsize=10)
                     subfig[i,j].errorbar(x,y,yerr=yerror, fmt="o", markersize=3,capsize=5., c=jpac_color[9], alpha=1,zorder=3)
 
                 ebeam = Datainput_007.eavg[ide]
@@ -1489,7 +1397,6 @@ elif option=='plot' or option=='plotlog':
                 subfig[i,j].tick_params(direction='in',labelsize=fuente)
                 subfig[i,j].legend(loc='upper right',ncol=1,frameon=True,fontsize=11)
                 k = k+1
-        #plt.show()
         fig.savefig('plot007.pdf', bbox_inches='tight')
         
 elif option=='plotbs' or option=='plotlogbs':
@@ -1827,10 +1734,8 @@ elif option=='plotbs' or option=='plotlogbs':
                 idxarray = np.where(E_idx007==idx[k])
                 for ide in idxarray[0]:
                     x, y = -Datainput_007.t[ide], Datainput_007.obs[ide]
-#                    xerror = np.absolute(Datainput_007.tmin[ide]-Datainput_007.tmax[ide])/2.
                     yerror = Datainput_007.error[ide]
                     ebeam_text = str(Datainput_007.ebeam[ide])
-#                    subfig[i,j].text(x,y,ebeam_text,fontsize=10)
                     subfig[i,j].errorbar(x,y,yerr=yerror, fmt="o", markersize=3,capsize=5., c=jpac_color[10], alpha=1,zorder=3)
 
                 ebeam = Datainput_007.eavg[ide]
@@ -1875,7 +1780,6 @@ elif option=='plotbs' or option=='plotlogbs':
                     subfig[i,j].set_ylim((1e-3,1.5e0))
                 subfig[i,j].tick_params(direction='in',labelsize=fuente)
                 k = k +1
-        #plt.show()
         fig.savefig('plotbs007.pdf', bbox_inches='tight')
      
 elif option=='test':
@@ -2003,56 +1907,6 @@ elif option=='polebs':
 
     fig.savefig('polebs.pdf', bbox_inches='tight')
 
-elif option=='meshgrid':
-    sth = 4.1**2#(mproton + mpsi)**2
-    slim = 4.25**2#(mlambdac+mdbar)**2
-    
-    if ninputs==7:
-        bff = np.loadtxt(bffinput)
-    else:
-        bff = np.loadtxt('pcbff.txt')
-
-    hojas = [1,2,3,4,5,6,7,8]
-
-    input0 = bff[nmc,:]
-    chi2 = input0[0]
-    parameters_input = np.array([ input0[i] for i in range(3,len(input0))])
-    n0l, n1l, n2l, a00l, a11l, a22l, a01l, a02l, a12l = np.array_split(parameters_input,9)
-    lmax = len(a00l)-1
-
-    def freal(x, y, irs, l):
-        a00, a11, a22 = a00l[l], a11l[l], a22l[l]
-        a01, a02, a12 = a01l[l], a02l[l], a12l[l]
-        return np.real(Denominator(x+1j*y,irs,mproton,mpsi,md,mlambdac,mdbar,mlambdac,a00,a11,a22,a01,a02,a12,l))
-
-    def fimag(x, y, irs, l):
-        a00, a11, a22 = a00l[l], a11l[l], a22l[l]
-        a01, a02, a12 = a01l[l], a02l[l], a12l[l]
-        return np.imag(Denominator(x+1j*y,irs,mproton,mpsi,md,mlambdac,mdbar,mlambdac,a00,a11,a22,a01,a02,a12,l))
-
-    def f(x, y, irs, l):
-        a00, a11, a22 = a00l[l], a11l[l], a22l[l]
-        a01, a02, a12 = a01l[l], a02l[l], a12l[l]
-        return np.absolute(Denominator(x+1j*y,irs,mproton,mpsi,md,mlambdac,mdbar,mlambdac,a00,a11,a22,a01,a02,a12,l))
-
-
-    x = np.linspace(sth, slim, 1000)
-    y = np.linspace(-0.01, -0.00000000000001, 1000)
-    X, Y = np.meshgrid(x, y)
-
-    ll = 0    
-    for i in hojas:
-        
-        Z = f(X, Y,i,ll)
-
-        fig, ax = plt.subplots()
-        plt.contourf(np.sqrt(X), 2.*np.sqrt(-Y), Z, 30, cmap='hot')
-        plt.colorbar();
-        ax.set_xlabel('M')
-        ax.set_ylabel('Width')
-        ax.set_title('Abs of denominator for RS='+str(i))
-        fig.savefig('plot_abs_'+str(i)+'.pdf', bbox_inches='tight')
-
 elif option=='total':
     fuente = 20; 
     nini, nfin = nmc, lmax
@@ -2067,10 +1921,6 @@ elif option=='total':
     sth = (mproton + mpsi + 0.0000001)**2
     send = sfromEbeam(15.,mproton)
     
-#    nplotpoints = 2
-#    sth  =  sfromEbeam(10.,mproton)
-#    send = sfromEbeam(11.,mproton)
-
     sarray = np.linspace(sth,send,nplotpoints)
     Earray = Ebeamfroms(sarray,mproton)
     storage_plot = np.zeros((3,nplotpoints))
@@ -2084,7 +1934,6 @@ elif option=='total':
         xsec = [ sigma_total(sarray[i],mphoton,mproton,mpsi,mproton,md,mlambdac,mdbar,mlambdac,N,n0l,n1l,n2l,a00l,a11l,a22l,a01l,a02l,a12l,lmax) for i in range(len(sarray))]
         fig = plt.figure()
         plt.xlim((Ebeamfroms(sth,mproton),15));
-        #plt.yscale('log'); plt.ylim(10e-2, 10e3)
         plt.plot(Earray,xsec,'-',lw=2,c=jpac_color[0],alpha=1,zorder=2)
         fig.savefig('sigmatot.pdf', bbox_inches='tight')
         storage_plot[0,:], storage_plot[1,:], storage_plot[2,:] = Earray, sarray, xsec
@@ -2128,7 +1977,6 @@ elif option=='totalbs':
 
     fig = plt.figure()
     plt.xlim((Ebeamfroms(sth,mproton),15));
-    #plt.yscale('log'); plt.ylim(10e-2, 10e3)
     plt.ylim(0, 60);
 
     plt.plot(Earray,xsec,'-',lw=2,c=jpac_color[0],alpha=1,zorder=1)

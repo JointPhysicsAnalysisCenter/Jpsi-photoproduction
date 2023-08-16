@@ -209,9 +209,6 @@ def observable_sc(s,t,m1,m2,m3,m4,nl,al,bl,lmax,clase):
 def sigma_tot(s,m1,m2,m3,m4,nl,al,bl,lmax):
     den = np.sqrt(kallen(s,m3**2,m4**2))
     num = np.sum([ (2*l+1)*np.imag(Tamp(s,l,m1,m2,m3,m4,nl[l],al[l],bl[l])) for l in range(lmax+1)])
-#    for l in range(lmax+1):
-#        print(s,l,hbarc2*(2*l+1)*np.imag(Tamp(s,l,m1,m2,m3,m4,nl[l],al[l],bl[l]))/den/1.0e6  )
-#    print(hbarc2*num/den/1.0e6)
     return hbarc2*num/den/1.0e6;
 
 ###############################################################################
@@ -260,7 +257,6 @@ def bs_total(xbs,sarray,m1,m2,m3,m4):
     ns, nbs  = len(sarray), len(xbs[:,0])
     idown68, iup68 = int(np.trunc(0.16*nbs)),  int(np.trunc(0.84*nbs))
     idown95, iup95 = int(np.trunc(0.025*nbs)), int(np.trunc(0.975*nbs))    
-#    idown95, iup95 = int(np.trunc(0.05*nbs)), int(np.trunc(0.95*nbs))    
     dw68, up68, dw95, up95 = np.zeros(ns), np.zeros(ns), np.zeros(ns), np.zeros(ns);
     for j in range(ns):
         s = sarray[j]
@@ -453,7 +449,6 @@ if option=='read' and ninputs==7:
     for i in range(len(vacio)):
         print(vacio[i]+'=',input0[i+2])
 
-
     chi2 = LSQ_sc(parameters_input)
     print('chi2=',chi2,'chi2/N=',chi2/ndata)
     pull = pull_sc(parameters_input)
@@ -519,19 +514,9 @@ elif option=='fit':
     #    print(m_pc.covariance); print(m_pc.covariance.correlation())
         nl, al, bl = np.array_split(m_pc.values,3)
         storage.append( (chi2,chi2dof,nl,al,bl) )
-        #   Structure boostrap fit = i
-        #       chi2 = storage[i][0]
-        #       chi2dof = storage[i][1]
-        #       al_0 = storagel[i][2][0], al_0 = storagel[i][2][1], ...
-        #       bl_0 = storagel[i][3][0], al_0 = storagel[i][3][1], ...
     
     #   Sorting
     sorted_storage = sorted(storage, key=lambda chi2: chi2[0])
-    #for i in range(nmc):
-    #    print(sorted_storage)
-    #    print(sorted_storage[0][0])
-    #    print(sorted_storage[1][0])
-    #    print(sorted_storage[i][2][1])
     
     #   File storage
     x_storage = []
@@ -622,8 +607,6 @@ elif option=='bs':
         m_bs.migrad();
         chi2, chi2dof = m_bs.fval, m_bs.fval/(len(Datainput.obs)-npar);
         nl, al, bl = np.array_split(m_bs.values,3)
-#        print('BS Fit ',i+1,' out of ',nbs, chi2, chi2dof)
-#        print(m_bs.params); 
 
         storage_bs.append( (chi2,chi2dof,nl,al,bl) )
 
@@ -640,37 +623,6 @@ elif option=='bs':
         x = np.concatenate((y0,y1),axis=0)
         x_storage.append(x)
     np.savetxt('pcbs.txt', x_storage)
-
-    """
-    #   Mean and errors
-    nnl, nal, nbl = len(nl), len(al), len(bl)
-    down68, up68 = int(np.trunc(0.16*nbs)),  int(np.trunc(0.84*nbs))
-    down95, up95 = int(np.trunc(0.025*nbs)), int(np.trunc(0.975*nbs))    
-    al_storage = []
-    for i in range(nal):
-        nl = np.array([ sorted_storage_bs[j][2][i] for j in range(nbs) ] )
-        nlsorted = np.sort(nl)
-        nl_array = [ i, np.mean(nlsorted), nlsorted[down68], nlsorted[up68], nlsorted[down95], nlsorted[up95] ]
-        al_storage.append(nl_array)
-    for i in range(nal):
-        al = np.array([ sorted_storage_bs[j][3][i] for j in range(nbs) ] )
-        alsorted = np.sort(al)
-        al_array = [ i+nal, np.mean(alsorted), alsorted[down68], alsorted[up68], alsorted[down95], alsorted[up95] ]
-        al_storage.append(al_array)
-    for i in range(nbl):
-        bl = np.array([ sorted_storage_bs[j][4][i] for j in range(nbs) ] )
-        blsorted = np.sort(bl)
-        bl_array = [ i+2*nal, np.mean(blsorted), blsorted[down68], blsorted[up68], blsorted[down95], blsorted[up95] ]
-        al_storage.append(bl_array)        
-    np.savetxt('pcmean_n_errors.txt', al_storage,fmt='%i %e %e %e %e %e')
-    
-    #   Covariance and correlation matrices
-    xarray = np.transpose(np.array(x_storage))    
-    xcovdiag = np.var(xarray, axis=1, ddof=1)
-    xcov, xcorr = np.cov(xarray), np.corrcoef(xarray);
-    np.savetxt('pccov.txt', xcov)  
-    np.savetxt('pccorr.txt', xcorr)
-    """
     
 ###############################################################################
 #   Plot
@@ -708,7 +660,6 @@ elif option=='plot' or option=='plotlog':
             subfig[0,1].set_ylim((1e-4,2e0))
             subfig[1,0].set_ylim((1e-4,2e0))
             subfig[1,1].set_ylim((1e-4,2e0))
-
 
         subfig[0,0].set_xlim((8,12))
         subfig[0,1].set_xlim((0.,10.))
@@ -795,7 +746,6 @@ elif option=='plot' or option=='plotlog':
             subfig[1,0].legend(loc='upper right',ncol=1,frameon=True,fontsize=11)
             subfig[1,1].legend(loc='upper right',ncol=1,frameon=True,fontsize=11)
 
-        #plt.show()
         fig.savefig('plotgluex.pdf', bbox_inches='tight')
 
     if dataset=='007' or dataset=='combined':
@@ -810,10 +760,8 @@ elif option=='plot' or option=='plotlog':
                 idxarray = np.where(E_idx007==idx[k])
                 for ide in idxarray[0]:
                     x, y = -Datainput_007.t[ide], Datainput_007.obs[ide]
-#                    xerror = np.absolute(Datainput_007.tmin[ide]-Datainput_007.tmax[ide])/2.
                     yerror = Datainput_007.error[ide]
                     ebeam_text = str(Datainput_007.ebeam[ide])
-#                    subfig[i,j].text(x,y,ebeam_text,fontsize=10)
                     subfig[i,j].errorbar(x,y,yerr=yerror, fmt="o", markersize=3,capsize=5., c=jpac_color[9], alpha=1,zorder=3)
 
                 ebeam = Datainput_007.eavg[ide]
@@ -841,7 +789,6 @@ elif option=='plot' or option=='plotlog':
                 subfig[i,j].tick_params(direction='in',labelsize=fuente)
                 subfig[i,j].legend(loc='upper right',ncol=1,frameon=True,fontsize=11)
                 k = k +1
-        #plt.show()
         fig.savefig('plot007.pdf', bbox_inches='tight')
         
 elif option=='plotbs' or option=='plotlogbs':
@@ -884,7 +831,6 @@ elif option=='plotbs' or option=='plotlogbs':
         Earray = Ebeamfroms(sarray,mproton)
         
         storage_plot, storage_plot0 = np.zeros((8,nplotpoints)), np.zeros((8,nplotpoints))
-
 
     if dataset=='gluex' or dataset=='combined':
 
@@ -1021,10 +967,8 @@ elif option=='plotbs' or option=='plotlogbs':
                 idxarray = np.where(E_idx007==idx[k])
                 for ide in idxarray[0]:
                     x, y = -Datainput_007.t[ide], Datainput_007.obs[ide]
-#                    xerror = np.absolute(Datainput_007.tmin[ide]-Datainput_007.tmax[ide])/2.
                     yerror = Datainput_007.error[ide]
                     ebeam_text = str(Datainput_007.ebeam[ide])
-#                    subfig[i,j].text(x,y,ebeam_text,fontsize=10)
                     subfig[i,j].errorbar(x,y,yerr=yerror, fmt="o", markersize=3,capsize=5., c=jpac_color[10], alpha=1,zorder=3)
 
                 ebeam = Datainput_007.eavg[ide]
@@ -1062,7 +1006,6 @@ elif option=='plotbs' or option=='plotlogbs':
                     subfig[i,j].set_ylim((1e-3,1.5e0))
                 subfig[i,j].tick_params(direction='in',labelsize=fuente)
                 k = k +1
-        #plt.show()
         fig.savefig('plotbs007.pdf', bbox_inches='tight')
         
 elif option=='total':
@@ -1136,7 +1079,6 @@ elif option=='totalbs':
 
     fig = plt.figure()
     plt.xlim((Ebeamfroms(sth,mproton),15));
-    #plt.yscale('log'); plt.ylim(10e-2, 10e3)
     plt.ylim(0, 60);
 
     plt.plot(Earray,xsec,'-',lw=2,c=jpac_color[0],alpha=1,zorder=1)
@@ -1147,7 +1089,6 @@ elif option=='totalbs':
     fig.savefig('sigmatotbs.pdf', bbox_inches='tight')
     fig.savefig('sigmatotbs.png', bbox_inches='tight')
         
-
 else:
     sys.exit('Not a valid option')
 

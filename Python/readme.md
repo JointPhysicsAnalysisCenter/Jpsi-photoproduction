@@ -1,21 +1,63 @@
-## Python codes
+# Python codes
 
-One channel calculation
+There are three versions of the code depending on how many channels are included in the model:
+- One channel: <code>jpsi_1c.py</code>
+- Two cahnnels: <code>jpsi_2c.py</code>
+- Three channels: <code>jpsi_3c.py</code>
 
-jpsi_1c.py code
+All three codes can be found in the <code> codes </code> folder
+
+The codes only need as input a set of options and the files with the Hall-C and GlueX data. Datafiles can be found in the  <code> data </code> folder and have to be in the same folder as the python code 
+
+The files with the results used in the paper can be found in the folder <code>results</code>
+
+All questions and comments on the Python codes and files can be sent to Cesar Fernandez-Ramirez: cefera@ccia.uned.es
+
+## Outputs
+
+Regardless of the code the outputs are
+
+Output files:
+
+- pcbff.txt    : Parameters of the best fit
+- pcbs.txt     : Parameters of the bootstrap
+- bsdata.txt   : Pseudodata used for the bootstrap
+- polebs.txt   : Poles from the bootstrap (only if the <code>polebs</code> option is available)
+- sigmatot.txt : Total cross section from the best fit (only if the <code>total</code> option is available)
+- plot_totalbs.txt       : Total cross section from the bootstrap (only if the <code>totalbs</code> option is available)
+- plot_xsec_gluex.txt    : Total cross section from the bootstrap to compare with GlueX data
+- plot_dsdt_gluex_0.txt  : Differential cross section from the bootstrap to compare with GlueX data, lowest energy
+- plot_dsdt_gluex_1.txt  : Differential cross section from the bootstrap to compare with GlueX data, mid energy
+- plot_dsdt_gluex_2.txt  : Differential cross section from the bootstrap to compare with GlueX data, highest energy
+- plot_dsdt_007??.txt    : Differential cross sections from the bootstrap to compare with Hall C data
+
+
+Output figures:
+
+- plotgluex.pdf    : Observables from the best fit(s) compared to GlueX data
+- plot007.pdf      : Observables from the best fit(s) compared to Hall C data
+- plotbsgluex.pdf  : Observables from the bootstrap compared to GlueX data
+- plotbs007.pdf    : Observables from the bootstrap compared to Hall C data
+- polebs.pdf       : Poles from the bootstrap
+- sigmatotbs.pdf   : Total cross section from the bootstrap (only if the <code>totalbs</code> option is available)
+- sigmatot.pdf     : Total cross section from the best fit(s)  (only if the <code>total</code> option is available)
+
+
+
+## One channel code
 
 Running:
 
->python jpsi_1c.py $option $dataset $nmc $lmax $leff ($file)
+<code> >python jpsi_1c.py $option $dataset $nmc $lmax $leff ($file) </code>
 
 Last input is optional
 
 $option
 
-read      : Read fit parameters for the best fit and computes chi2 for each point and pull. If $file is provided, that's used for calculation, if not pcbff.txt is used.
-fit       : Fit selected datasets. If $file is provided it is used as seed for the fit parameters. Output: pcbff.txt, fit parameters ordered according to chi2
-bs        : Bootstrap calculation. If $file is provided, that's used as seed for the bootstrap, if not pcbff.txt is used. The bootstraped parameters are only those bootstraped in the paper. This can be changed modifying the variable 'fixated'. Output: pcbs.txt
-plot      : Plot of the best fit. If $file is provided, that's used for computing observables, if not pcbff.txt is used
+- read      : Read fit parameters for the best fit and computes chi2 for each point and pull. If $file is provided, that's used for calculation, if not pcbff.txt is used.
+- fit       : Fit selected datasets. If $file is provided it is used as seed for the fit parameters. Output: pcbff.txt, fit parameters ordered according to chi2
+- bs        : Bootstrap calculation. If $file is provided, that's used as seed for the bootstrap, if not pcbff.txt is used. The bootstraped parameters are only those bootstraped in the paper. This can be changed modifying the variable 'fixated'. Output: pcbs.txt
+- plot      : Plot of the best fit. If $file is provided, that's used for computing observables, if not pcbff.txt is used
 plotlog   : Plot of the best fit in log-y scale. If $file is provided, that's used for computing observables, if not pcbff.txt is used
 plotbs    : Calculation and plotting of the observables from the bootstrap. If $file is provided, that's used for computing observables, if not pcbs.txt is used
 plotlogbs : Calculation and plotting in log-y scale of the observables from the bootstrap. If $file is provided, that's used for computing observables, if not pcbs.txt is used. 
@@ -55,13 +97,11 @@ If $option==plot, plotlog, total : See $nmc usage
 else irrelevant
 
 
-Two channels calculation
-
-jpsi_2c.py code
+## Two channels calculation
 
 Running:
 
->python jpsi_2c.py $option $dataset $nmc $lmax $modelo ($file)
+<code> >python jpsi_2c.py $option $dataset $nmc $lmax $modelo ($file)</code>
 
 $option
 
@@ -121,13 +161,9 @@ c     :
 
 
 
-Three channels calculation
+## Three channels code
 
-jpsi_3c.py code
-
-Running:
-
->python jpsi_2c.py $option $dataset $nmc $lmax $modelo ($file)
+<code> >python jpsi_2c.py $option $dataset $nmc $lmax $modelo ($file)</code>
 
 $option
 

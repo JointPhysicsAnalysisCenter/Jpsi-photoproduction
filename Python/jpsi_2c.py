@@ -38,8 +38,8 @@ import copy
 #   Input
 ###############################################################################
 
-opciones = ['fit','bs','plot','plotlog','plotbs','plotlogbs','test','polebff','polecheck','read','total','totalbs']
-modelos  = ['init','sfree','scat2']
+opciones = ['fit','bs','plot','plotlog','plotbs','plotlogbs','polebff','polecheck','read','total','totalbs']
+modelos  = ['init','sfree','scat2','a','c']
 
 if len(sys.argv)<6:
     print('Number of input parameters should be 6 or 7, input was ',len(sys.argv))
@@ -1539,33 +1539,6 @@ elif option=='plotbs' or option=='plotlogbs':
 
         fig.savefig('plotbs007.pdf', bbox_inches='tight')
      
-elif option=='test':
-    lmax = 0
-    Egam = 12.
-    theta = np.pi/2.
-    x = np.cos(theta)
-    s = sfromEbeam(Egam,mproton)
-    t = tfromcostheta(s,x,mphoton,mproton,mpsi,mproton)
-    q0 = cmomentum(s,mpsi,mproton)
-    q1 = cmomentum(s,mdbar,mlambdac)
-    print(s,t,q0,q1)
-    G0, G1 = PhaseSpace(s,mpsi,mproton), PhaseSpace(s,mdbar,mlambdac);
-    print(G0,G1)
-    N = 1.
-    n0l  = [-0.09981451,-0.01462837,-0.00303203,-0.00069168 ]
-    n1l  = [-3.1814832, 0., 0., 0. ]
-    a00l = [-4.2314169, -0.87250104,-0.0357544,-0.11582914]
-    a01l = [0.098642893, 0., 0., 0.]
-    a11l = [0.94256618, 0., 0., 0.]
-    b00l = [ -3.590315, 0., 0., 0.]
-    b01l = [0.,0.,0.,0.]
-    b11l = [-2.9318495,0.,0.,0.]
-    m1, m2, m3, m4, m5, m6 = mphoton, mproton, mpsi, mproton, mdbar, mlambdac;
-
-    l = 0
-    dsdt = Amp(s,l,m1,m2,m3,m4,m5,m6,n0l[l],n1l[l],a00l[l],a01l[l],a11l[l],b00l[l],b01l[l],b11l[l])
-    print(dsdt)
-        
 elif option=='polebff' or option=='polecheck':
     
     nini, nfin = nmc, lmax

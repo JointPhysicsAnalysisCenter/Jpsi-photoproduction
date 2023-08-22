@@ -201,3 +201,12 @@ Run: <code> >python jpsi_2c.py $option $dataset $nmc $lmax $modelo ($file)</code
 - <code>init</code> : <code> $option==fit</code> : allows to determine which parameters are free and which ones are fixed to zero; <code> $option in [plotbs, plotlogbs, totalbs]</code>: computes the observables. Output files: plot_xsec_gluex.txt (GlueX total cross section), plot_dsdt_gluex_?.txt (3 files with GlueX differential cross sections); plot_dsdt_007??.txt (files with Hall-C 007 differential cross sections) where ? and ?? are numbers.
 
 - <code>scat3</code> : <code>$option==fit</code> : selects the fit parameters used in the paper; <code>$option in [plotbs, plotlogbs, totalbs]</code> : reads observables from files
+
+## Code to compute Table I
+
+And one code to compute the observables, <code>scatlength.py</code> in table I and another to compute the plot in the appendix <code>scatlengthhistogram.py</code>. These two codes need the files with the bootstraps
+
+Input: The codes
+
+## Code to compute Figure 6 in the appendix
+

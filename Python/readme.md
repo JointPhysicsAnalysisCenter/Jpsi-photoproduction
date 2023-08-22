@@ -44,12 +44,9 @@ Output figures:
 
 ## Libraries
 
-- numpy
-
-- <code>copy</code>,
+- <code>copy</code>
 - <code>sys</code>
 - <code>numpy</code>
-- <code>copy</code>
 - <code>matplotlib.pyplot</code>
 - <code>from argparse import Namespace</code>
 - <code>from iminuit import Minuit</code>
@@ -65,8 +62,8 @@ Last input is optional
 
 - <code>read</code>      : Read fit parameters for the best fit and computes $\chi^2$ for each point and pull. If <code>$file</code> is provided, that's used for calculation, if not pcbff.txt is used.
 - <code>fit</code>       : Fit selected datasets. If <code>$file</code> is provided it is used as seed for the fit parameters. Output: pcbff.txt, fit parameters ordered according to $\chi^2$
-- <code>bs </code>       : Bootstrap calculation. If $file is provided, that's used as seed for the bootstrap, if not pcbff.txt is used. The bootstraped parameters are only those bootstraped in the paper. This can be changed modifying the variable <code>fixated</code>. Output: pcbs.txt
-- <code>plot </code>     : Plot of the best fit. If $file is provided, that's used for computing observables, if not pcbff.txt is used
+- <code>bs </code>       : Bootstrap calculation. If <code>$file</code> is provided, that's used as seed for the bootstrap, if not pcbff.txt is used. The bootstraped parameters are only those bootstraped in the paper. This can be changed modifying the variable <code>fixated</code>. Output: pcbs.txt
+- <code>plot </code>     : Plot of the best fit. If <code>$file</code> is provided, that's used for computing observables, if not pcbff.txt is used
 - <code>plotlog </code>  : Plot of the best fit in log-y scale. If <code>$file</code> is provided, that's used for computing observables, if not pcbff.txt is used
 -<code> plotbs</code>    : Calculation and plotting of the observables from the bootstrap. If <code>$file</code> is provided, that's used for computing observables, if not pcbs.txt is used
 - <code>plotlogbs</code> : Calculation and plotting in log-y scale of the observables from the bootstrap. If <code>$file</code> is provided, that's used for computing observables, if not pcbs.txt is used. 
@@ -110,59 +107,49 @@ Run: <code> >python jpsi_2c.py $option $dataset $nmc $lmax $modelo ($file)</code
 
 <code>$option</code>
 
-- read      : Read fit parameters for the best fit and computes chi2 for each point and pull. If $file is provided, that's used for calculation, if not pcbff.txt is used.
-- fit       : Fit selected datasets. If $file is provided it is used as seed for the fit parameters. Output: pcbff.txt, fit parameters ordered according to chi2
-- bs        : Bootstrap calculation. If $file is provided, that's used as seed for the bootstrap, if not pcbff.txt is used. The bootstraped parameters are only those bootstraped in the paper. This can be changed modifying the variable 'fixated'. Output: pcbs.txt
-- plot      : Plot of the best fit. If $file is provided, that's used for computing observables, if not pcbff.txt is used
-- plotlog   : Plot of the best fit in log-y scale. If $file is provided, that's used for computing observables, if not pcbff.txt is used
-- plotbs    : Calculation and plotting of the observables from the bootstrap. If $file is provided, that's used for computing observables, if not pcbs.txt is used
-- plotlogbs : Calculation and plotting in log-y scale of the observables from the bootstrap. If $file is provided, that's used for computing observables, if not pcbs.txt is used. 
-- total     : Calculation and plotting of the total cross section. If $file is provided, that's used for computing observables, if not pcbff.txt is used
-- totalbs   : Calculation and plotting of the total cross section from the bootstrap. If $file is provided, that's used for computing observables, if not pcbs.txt is used
-- polebff   : Calculation of poles and Riemann sheets for the best fits from $file (pcbff.txt if no $file is provided)
-- polecheck : Check if there are poles on the first Riemann sheet for the best fits from $file (pcbff.txt if no $file is provided)
+- <code>read</code>: Read fit parameters for the best fit and computes $\chi^2$ for each point and pull. If <code>$file</code> is provided, that's used for calculation, if not pcbff.txt is used.
+- <code>fit</code>: Fit selected datasets. If <code>$file</code> is provided it is used as seed for the fit parameters. Output: pcbff.txt, fit parameters ordered according to $\chi^2$
+- <code>bs</code>: Bootstrap calculation. If <code>$file</code> is provided, that's used as seed for the bootstrap, if not pcbff.txt is used. The bootstraped parameters are only those bootstraped in the paper. This can be changed modifying the variable <code>fixated</code>. Output: pcbs.txt
+- <code>plot</code>: Plot of the best fit. If <code>$file</code> is provided, that's used for computing observables, if not pcbff.txt is used
+- <code>plotlog</code>: Plot of the best fit in log-y scale. If <code>$file</code> is provided, that's used for computing observables, if not pcbff.txt is used
+- <code>plotbs</code>: Calculation and plotting of the observables from the bootstrap. If <code>$file</code> is provided, that's used for computing observables, if not pcbs.txt is used
+- <code>plotlogbs</code>: Calculation and plotting in log-y scale of the observables from the bootstrap. If <code>$file</code> is provided, that's used for computing observables, if not pcbs.txt is used. 
+- <code>total</code>: Calculation and plotting of the total cross section. If <code>$file</code> is provided, that's used for computing observables, if not pcbff.txt is used
+- <code>totalbs</code>: Calculation and plotting of the total cross section from the bootstrap. If <code>$file</code> is provided, that's used for computing observables, if not pcbs.txt is used
+- <code>polebff</code>: Calculation of poles and Riemann sheets for the best fits from <code>$file</code> (pcbff.txt if no <code>$file</code> is provided)
+- <code>polecheck</code>: Check if there are poles on the first Riemann sheet for the best fits from <code>$file</code> (pcbff.txt if no <code>$file</code> is provided)
 
 
 <code>$dataset</code>
 
-- $option== fit, bs, plot, plotlog, plotbs, plotlogbs
+- <code>$option in  [fit, bs, plot, plotlog, plotbs, plotlogbs]</code>
 
--<code> gluex</code>    : uses only GlueX dataset
+- <code>gluex</code>    : uses only GlueX dataset
 - <code>007</code>      : uses only Hall-C 007 dataset
 - <code>combined</code> : uses both GlueX and Hall-C 007 datasets
 
 
 <code>$nmc </code>
 
-- $option==read          : irrelevant
-- $option==fit           : provides the number of fits with randomly seeded parameters to find the best fit
-- $option==bs            : provides the number of bootstrap fits to perform
-- $option==plot, plotlog, total : Used to plot several best fits from Sfile (if $file is not provided pcbff.txt is used). all best fits from $nmc to $lmax are plotted. If $nmc =0 and $lmax=1 only absolute best fit is plotted
-- $option==polecheck, polebff : Used to compute poles for several best fits from Sfile (if $file is not provided pcbff.txt is used). all best fits from $nmc to $lmax are plotted. If $nmc =0 and $lmax=1 only absolute best fit is plotted
+- <code>$option==read</code>: irrelevant
+- <code>$option==fit</code>: provides the number of fits with randomly seeded parameters to find the best fit
+- <code>$option==bs</code>: provides the number of bootstrap fits to perform
+- <code>$option in [plot, plotlog, total]</code> : Used to plot several best fits from <code>Sfile</code> (if <code>$file</code> is not provided pcbff.txt is used). all best fits from <code>$nmc</code> to <code>$lmax</code> are plotted. If <code>$nmc==0</code> and <code>$lmax==1</code> only absolute best fit is plotted
+- <code>$option in [polecheck, polebff]</code> : Used to compute poles for several best fits from Sfile (if <code>$file</code> is not provided pcbff.txt is used). all best fits from <code>$nmc</code> to <code>$lmax</code> are plotted. If <code>$nmc==0</code> and <code>$lmax==1</code> only absolute best fit is plotted
 
 <code>$lmax</code>
 
-- $option==read, bs, plotbs, plotlogbs, total, totalbs : irrelevant
-- $option==fit                         : Number of partial waves used in the model for the fit
-- $option==polebff, polecheck, plot, plotlog, total : see $nmc
+- <code>$option in [read, bs, plotbs, plotlogbs, total, totalbs]</code>: irrelevant
+- <code>$option==fit</code>: Number of partial waves used in the model for the fit
+- <code>$option in [polebff, polecheck, plot, plotlog, total]</code>: see <code>$nmc</code>
 
 <code>$modelo</code>
 
-- <code>init</code>  : 
--- $option==fit : allows to determine which parameters are free and which ones are fixed to zero
--- $option==plotbs, plotlogbs, totalbs : computes the observables. Output files: plot_xsec_gluex.txt (GlueX total cross section), plot_dsdt_gluex_?.txt (3 files with GlueX differential cross sections); plot_dsdt_007??.txt (files with Hall-C 007 differential cross sections) where ? and ?? are numbers.
-- <code>sfree</code> :
--- <code>$option==fit</code> : Fixes the higher partial waves using pcbff.txt file or $file if given and fits S wave
--- rest of options equivalent to <code>$modelo==init</code>
-- <code>scat2</code> : 
--- $option==fit : selects the fit parameters used in the paper
--- $option==plotbs, plotlogbs, totalbs : reads observables from files
-- <code>a</code>     : 
--- $option==fit fixes the model to minimal open-charm contribution
--- rest of options equivalent to <code>$modelo==init</code>
-- <code>c</code>     :
--- $option==fit fixes the model to miximal open-charm contribution
--- rest of options equivalent to <code>$modelo==init</code>
+- <code>init</code>: <code>$option==fit</code>: allows to determine which parameters are free and which ones are fixed to zero; <code>$option in [plotbs, plotlogbs, totalbs]</code>: computes the observables. Output files: plot_xsec_gluex.txt (GlueX total cross section), plot_dsdt_gluex_?.txt (3 files with GlueX differential cross sections); plot_dsdt_007??.txt (files with Hall-C 007 differential cross sections) where ? and ?? are numbers.
+- <code>sfree</code>: <code>$option==fit</code>: Fixes the higher partial waves using pcbff.txt file or <code>$file</code> if given and fits S wave; rest of options equivalent to <code>$modelo==init</code>
+- <code>scat2</code>: <code>$option==fit</code>: selects the fit parameters used in the paper; <code>$option in [plotbs, plotlogbs, totalbs]</code>: reads observables from files
+- <code>a</code>: <code>$option==fit</code> fixes the model to minimal open-charm contribution; rest of options equivalent to <code>$modelo==init</code>
+- <code>c</code>: <code>$option==fit</code> fixes the model to miximal open-charm contribution; rest of options equivalent to <code>$modelo==init</code>
 
 
 
@@ -172,18 +159,18 @@ Run: <code> >python jpsi_2c.py $option $dataset $nmc $lmax $modelo ($file)</code
 
 <code>$option</code>
 
-- read      : Read fit parameters for the best fit and computes chi2 for each point and pull. If $file is provided, that's used for calculation, if not pcbff.txt is used.
-- fit       : Fit selected datasets. If $file is provided it is used as seed for the fit parameters. Output: pcbff.txt, fit parameters ordered according to chi2
-- bs        : Bootstrap calculation. If $file is provided, that's used as seed for the bootstrap, if not pcbff.txt is used. The bootstraped parameters are only those bootstraped in the paper. This can be changed modifying the variable 'fixated'. Output: pcbs.txt
-- plot      : Plot of the best fit. If $file is provided, that's used for computing observables, if not pcbff.txt is used
-- plotlog   : Plot of the best fit in log-y scale. If $file is provided, that's used for computing observables, if not pcbff.txt is used
-- plotbs    : Calculation and plotting of the observables from the bootstrap. If $file is provided, that's used for computing observables, if not pcbs.txt is used
-- plotlogbs : Calculation and plotting in log-y scale of the observables from the bootstrap. If $file is provided, that's used for computing observables, if not pcbs.txt is used. 
-- total     : Calculation and plotting of the total cross section. If $file is provided, that's used for computing observables, if not pcbff.txt is used
-- totalbs   : Calculation and plotting of the total cross section from the bootstrap. If $file is provided, that's used for computing observables, if not pcbs.txt is used
-- polebff   : Calculation of poles and Riemann sheets for the best fits from $file (pcbff.txt if no $file is provided)
-- polecheck : Check if there are poles on the first Riemann sheet for the best fits from $file (pcbff.txt if no $file is provided)
-- polebs    : compute all poles for the bootstrap from $file (pcbs.txt if no $file is provided)
+- <code> read</code>       : Read fit parameters for the best fit and computes $\chi^2$ for each point and pull. If <code>$file</code> is provided, that's used for calculation, if not pcbff.txt is used.
+- <code> fit</code>        : Fit selected datasets. If <code>$file</code> is provided it is used as seed for the fit parameters. Output: pcbff.txt, fit parameters ordered according to $\chi^2$
+- <code> bs</code>         : Bootstrap calculation. If <code>$file</code> is provided, that's used as seed for the bootstrap, if not pcbff.txt is used. The bootstraped parameters are only those bootstraped in the paper. This can be changed modifying the variable <code>fixated</code>. Output: pcbs.txt
+- <code> plot</code>       : Plot of the best fit. If <code>$file</code> is provided, that's used for computing observables, if not pcbff.txt is used
+- <code> plotlog</code>    : Plot of the best fit in log-y scale. If <code>$file</code> is provided, that's used for computing observables, if not pcbff.txt is used
+- <code> plotbs</code>     : Calculation and plotting of the observables from the bootstrap. If <code>$file</code> is provided, that's used for computing observables, if not pcbs.txt is used
+- <code> plotlogbs</code>  : Calculation and plotting in log-y scale of the observables from the bootstrap. If <code>$file</code> is provided, that's used for computing observables, if not pcbs.txt is used. 
+- <code> total</code>      : Calculation and plotting of the total cross section. If <code>$file</code> is provided, that's used for computing observables, if not pcbff.txt is used
+- <code> totalbs</code>    : Calculation and plotting of the total cross section from the bootstrap. If <code>$file</code> is provided, that's used for computing observables, if not pcbs.txt is used
+- <code> polebff</code>    : Calculation of poles and Riemann sheets for the best fits from <code>$file</code> (pcbff.txt if no <code>$file</code> is provided)
+- <code> polecheck</code>  : Check if there are poles on the first Riemann sheet for the best fits from <code>$file</code> (pcbff.txt if no <code>$file</code> is provided)
+- <code> polebs</code>     : compute all poles for the bootstrap from <code>$file</code> (pcbs.txt if no <code>$file</code> is provided)
 
 <code>$dataset</code>
 
@@ -196,25 +183,21 @@ Run: <code> >python jpsi_2c.py $option $dataset $nmc $lmax $modelo ($file)</code
 
 <code>$nmc </code>
 
-- $option==read          : irrelevant
-- $option==fit           : provides the number of fits with randomly seeded parameters to find the best fit
-- $option==bs            : provides the number of bootstrap fits to perform
-- $option==plot, plotlog, total : Used to plot several best fits from Sfile (if $file is not provided pcbff.txt is used). all best fits from $nmc to $lmax are plotted. If $nmc =0 and $lmax=1 only absolute best fit is plotted
-- $option==polecheck, polebff : Used to compute poles for several best fits from Sfile (if $file is not provided pcbff.txt is used). all best fits from $nmc to $lmax are plotted. If $nmc =0 and $lmax=1 only absolute best fit is plotted
+- <code>$option==read</code> : irrelevant
+- <code>$option==fit</code>  : provides the number of fits with randomly seeded parameters to find the best fit
+- <code>$option==bs</code> : provides the number of bootstrap fits to perform
+- <code>$option in [plot, plotlog, total]</code>  : Used to plot several best fits from <code>$file</code>  (if <code> $file</code>  is not provided pcbff.txt is used). all best fits from <code> $nmc</code>  to <code> $lmax</code>  are plotted. If <code>$nmc==0</code>  and <code> $lmax=1</code>  only absolute best fit is plotted
+- <code>$option in [polecheck, polebff]</code>  : Used to compute poles for several best fits from <code>$file</code> (if <code> $file</code>  is not provided pcbff.txt is used). all best fits from <code> $nmc</code> to <code>$lmax</code>  are plotted. If <code> $nmc==0</code>  and <code> $lmax==1</code>  only absolute best fit is plotted
 
 
 <code>$lmax</code>
 
-- $option==read, bs, plotbs, plotlogbs, total, totalbs : irrelevant
-- $option==fit                         : Number of partial waves used in the model for the fit
-- $option==polebff, polecheck, plot, plotlog, total : see $nmc
+- <code> $option==fit</code> : Number of partial waves used in the model for the fit
+- <code> $option in [polebff , polecheck, plot, plotlog, total]</code>  : see <code> $nmc</code> 
+- rest: irrelevant
 
 <code>$modelo</code>
 
-- <code>init</code>  : 
--- $option==fit : allows to determine which parameters are free and which ones are fixed to zero
--- $option==plotbs, plotlogbs, totalbs : computes the observables. Output files: plot_xsec_gluex.txt (GlueX total cross section), plot_dsdt_gluex_?.txt (3 files with GlueX differential cross sections); plot_dsdt_007??.txt (files with Hall-C 007 differential cross sections) where ? and ?? are numbers.
+- <code>init</code> : <code> $option==fit</code> : allows to determine which parameters are free and which ones are fixed to zero; <code> $option in [plotbs, plotlogbs, totalbs]</code>: computes the observables. Output files: plot_xsec_gluex.txt (GlueX total cross section), plot_dsdt_gluex_?.txt (3 files with GlueX differential cross sections); plot_dsdt_007??.txt (files with Hall-C 007 differential cross sections) where ? and ?? are numbers.
 
-- <code>scat3</code> : 
--- $option==fit : selects the fit parameters used in the paper
--- $option==plotbs, plotlogbs, totalbs : reads observables from files
+- <code>scat3</code> : <code>$option==fit</code> : selects the fit parameters used in the paper; <code>$option in [plotbs, plotlogbs, totalbs]</code> : reads observables from files

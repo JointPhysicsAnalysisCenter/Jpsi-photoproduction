@@ -204,9 +204,40 @@ Run: <code> >python jpsi_2c.py $option $dataset $nmc $lmax $modelo ($file)</code
 
 ## Code to compute Table I
 
-And one code to compute the observables, <code>scatlength.py</code> in table I and another to compute the plot in the appendix <code>scatlengthhistogram.py</code>. These two codes need the files with the bootstraps
+The code to generate the numbers in Table I can be found in the <code> codes </code> folder.
 
-Input: The codes
+Run: <code> >python scatlength.py $modelo $bffinput </code>
+
+<code>$modelo</code>
+
+- <code>1c</code>: Compute for the bootstrap of the 1c model
+- <code>2c</code>: Compute for the bootstrap of the 2c model
+- <code>3c</code>: Compute for the bootstrap of the 3c model
+- <code>1cb</code>: Compute for the best fit of the 1c model
+- <code>2cb</code>: Compute for the best fit of the 2c model
+- <code>3cb</code>: Compute for the best fit of the 3c model
+
+<code>$bffinput</code>
+
+- File with either the bootstrap or the best fit with the parameters to compute the observables
+- They input files can be found in the <code>results</code> folder
+
+The input files have to be in the same folder as the python code. 
+
+*Examples*
+- To compute the 3c resonant model of the bootstrap use: <code> >python scatlength.py 3c pcbs_3cr.txt </code>
+- To compute the 1c best fit use: <code> >python scatlength.py 1c pcbff_1c.txt </code>
 
 ## Code to compute Figure 6 in the appendix
 
+This figure is obtained from the combined bootstraps of the 3cNR and 3cR solutions. The code and inputs can be found in <code>results/3cc</code>. 
+
+Run: <code> >python scatlengthhistogram.py</code>
+
+# Results folders
+
+- <code>1c</code>: 1 channel results
+- <code>2c</code>: 2 channels results
+- <code>3cc</code>: 3 channels bootstrap files combined (both resonant and nonresonant bootstraps)
+- <code>3cnr</code>: 3 channels nonresonant results
+- <code>3cr</code>: 3 channels resonant results

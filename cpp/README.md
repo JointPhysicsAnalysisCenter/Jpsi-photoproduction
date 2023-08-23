@@ -9,7 +9,7 @@ jpacPhoto partial_waves.cpp
 ```
 General information of each script and its output can be found at the top of each file and making changes should (hopefully) be straightforward following the comments throughout.
 
-### Summary of provided scipts
+### Summary of provided scripts
 
 - [**dynamics.cpp**](./jpacPhoto-2.0/scripts/jpsi_photoproduction/dynamics.cpp)
     Computes the quantities $\zeta_\text{th}$, $R_\text{VMD}$ and $a_{\psi p}$ for the  _best fit_ parameters of each of the four models (1C, 2C, 3C-NR, 3C-R) formatted as a table in the commandline.

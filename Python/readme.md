@@ -148,10 +148,6 @@ Run: <code> >python jpsi_2c.py $option $dataset $nmc $lmax $modelo ($file)</code
 - <code>init</code>: <code>$option==fit</code>: allows to determine which parameters are free and which ones are fixed to zero; <code>$option in [plotbs, plotlogbs, totalbs]</code>: computes the observables. Output files: plot_xsec_gluex.txt (GlueX total cross section), plot_dsdt_gluex_?.txt (3 files with GlueX differential cross sections); plot_dsdt_007??.txt (files with Hall-C 007 differential cross sections) where ? and ?? are numbers.
 - <code>sfree</code>: <code>$option==fit</code>: Fixes the higher partial waves using pcbff.txt file or <code>$file</code> if given and fits S wave; rest of options equivalent to <code>$modelo==init</code>
 - <code>scat2</code>: <code>$option==fit</code>: selects the fit parameters used in the paper; <code>$option in [plotbs, plotlogbs, totalbs]</code>: reads observables from files
-- <code>a</code>: <code>$option==fit</code> fixes the model to minimal open-charm contribution; rest of options equivalent to <code>$modelo==init</code>
-- <code>c</code>: <code>$option==fit</code> fixes the model to miximal open-charm contribution; rest of options equivalent to <code>$modelo==init</code>
-
-
 
 ## Three channels code
 
